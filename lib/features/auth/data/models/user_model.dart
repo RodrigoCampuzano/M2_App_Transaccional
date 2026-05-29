@@ -1,10 +1,3 @@
-// ============================================================
-// user_model.dart - Modelo de usuario
-// Representación del usuario con serialización JSON
-// ============================================================
-
-/// Modelo que representa un usuario del sistema.
-/// Incluye métodos de serialización para comunicación con la API.
 class UserModel {
   final int? id;
   final String name;
@@ -18,7 +11,6 @@ class UserModel {
     this.createdAt,
   });
 
-  /// Crea una instancia de [UserModel] desde un Map JSON
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'] as int?,
@@ -28,16 +20,10 @@ class UserModel {
     );
   }
 
-  /// Convierte el modelo a un Map JSON para enviar a la API
   Map<String, dynamic> toJson() {
-    return {
-      if (id != null) 'id': id,
-      'name': name,
-      'email': email,
-    };
+    return {if (id != null) 'id': id, 'name': name, 'email': email};
   }
 
-  /// Crea una copia del modelo con campos actualizados
   UserModel copyWith({
     int? id,
     String? name,

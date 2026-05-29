@@ -1,13 +1,6 @@
-// ============================================================
-// custom_button.dart - Botón reutilizable con gradiente
-// Widget con animaciones de escala al presionar
-// ============================================================
-
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Botón personalizado con gradiente, animación de escala
-/// y soporte para estados de carga.
 class CustomButton extends StatefulWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -71,10 +64,7 @@ class _CustomButtonState extends State<CustomButton>
       child: AnimatedBuilder(
         animation: _scaleAnimation,
         builder: (context, child) {
-          return Transform.scale(
-            scale: _scaleAnimation.value,
-            child: child,
-          );
+          return Transform.scale(scale: _scaleAnimation.value, child: child);
         },
         child: Container(
           width: widget.width ?? double.infinity,
@@ -83,10 +73,7 @@ class _CustomButtonState extends State<CustomButton>
             gradient: widget.onPressed != null && !widget.isLoading
                 ? AppTheme.primaryGradient
                 : LinearGradient(
-                    colors: [
-                      Colors.grey.shade400,
-                      Colors.grey.shade500,
-                    ],
+                    colors: [Colors.grey.shade400, Colors.grey.shade500],
                   ),
             borderRadius: BorderRadius.circular(12),
             boxShadow: [

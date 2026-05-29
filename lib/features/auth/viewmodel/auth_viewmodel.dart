@@ -1,32 +1,18 @@
-// ============================================================
-// auth_viewmodel.dart - ViewModel de autenticación (MVVM)
-// Gestiona el estado de autenticación con ChangeNotifier
-// ============================================================
-
 import 'package:flutter/foundation.dart';
 import '../data/models/user_model.dart';
 import '../data/repositories/auth_repository.dart';
 import '../../../../core/network/api_client.dart';
 
-/// ViewModel que gestiona el estado de autenticación.
-/// Implementa [ChangeNotifier] para notificar cambios a la UI.
-/// 
-/// Responsabilidades:
-/// - Login y registro de usuarios
-/// - Manejo del estado de carga y errores
-/// - Almacenar la sesión del usuario actual
 class AuthViewModel extends ChangeNotifier {
   final AuthRepository _repository;
   final ApiClient _apiClient;
 
-  // Estado
   UserModel? _user;
   String? _token;
   bool _isLoading = false;
   String? _error;
   bool _isAuthenticated = false;
 
-  // Getters - Exponen el estado de forma reactiva
   UserModel? get user => _user;
   String? get token => _token;
   bool get isLoading => _isLoading;
@@ -36,18 +22,10 @@ class AuthViewModel extends ChangeNotifier {
   AuthViewModel({
     required AuthRepository repository,
     required ApiClient apiClient,
-  })  : _repository = repository,
-        _apiClient = apiClient;
+  }) : _repository = repository,
+       _apiClient = apiClient;
 
-  // ============================================================
-  // Login - Iniciar sesión
-  // ============================================================
-  /// Intenta iniciar sesión con las credenciales proporcionadas.
-  /// Actualiza el estado reactivamente para que la UI se actualice.
-  Future<bool> login({
-    required String email,
-    required String password,
-  }) async {
+  Future<bool> login({required String email, required String password}) async {
     _setLoading(true);
     _clearError();
 
@@ -61,7 +39,6 @@ class AuthViewModel extends ChangeNotifier {
       _token = authResponse.token;
       _isAuthenticated = true;
 
-      // Establecer el token en el ApiClient para futuras peticiones
       _apiClient.setToken(_token);
 
       _setLoading(false);
@@ -73,11 +50,6 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  // ============================================================
-  // Register - Registrar usuario
-  // ============================================================
-  /// Registra un nuevo usuario en el sistema.
-  /// Si el registro es exitoso, inicia sesión automáticamente.
   Future<bool> register({
     required String name,
     required String email,
@@ -97,7 +69,6 @@ class AuthViewModel extends ChangeNotifier {
       _token = authResponse.token;
       _isAuthenticated = true;
 
-      // Establecer el token en el ApiClient
       _apiClient.setToken(_token);
 
       _setLoading(false);
@@ -109,11 +80,6 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  // ============================================================
-  // Logout - Cerrar sesión
-  // ============================================================
-  /// Cierra la sesión del usuario actual.
-  /// Limpia todos los datos de autenticación.
   void logout() {
     _user = null;
     _token = null;
@@ -121,10 +87,6 @@ class AuthViewModel extends ChangeNotifier {
     _apiClient.setToken(null);
     notifyListeners();
   }
-
-  // ============================================================
-  // Helpers privados
-  // ============================================================
 
   void _setLoading(bool value) {
     _isLoading = value;
@@ -140,10 +102,8 @@ class AuthViewModel extends ChangeNotifier {
     _error = null;
   }
 
-  /// Extrae un mensaje legible del error
   String _parseError(dynamic error) {
     final message = error.toString();
-    // Remover el prefijo "Exception: " si existe
     if (message.startsWith('Exception: ')) {
       return message.substring(11);
     }

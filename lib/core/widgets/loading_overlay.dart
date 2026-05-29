@@ -1,12 +1,5 @@
-// ============================================================
-// loading_overlay.dart - Overlay de carga con animación
-// ============================================================
-
 import 'package:flutter/material.dart';
 
-/// Widget que muestra un overlay semi-transparente con un
-/// indicador de carga centrado. Se usa encima del contenido
-/// mientras se procesan peticiones.
 class LoadingOverlay extends StatelessWidget {
   final bool isLoading;
   final Widget child;

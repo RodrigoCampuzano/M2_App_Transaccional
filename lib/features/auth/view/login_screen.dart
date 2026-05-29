@@ -1,8 +1,3 @@
-// ============================================================
-// login_screen.dart - Pantalla de inicio de sesión
-// UI rica con gradientes, animaciones y widgets avanzados
-// ============================================================
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
@@ -12,8 +7,6 @@ import '../viewmodel/auth_viewmodel.dart';
 import 'register_screen.dart';
 import '../../products/view/product_list_screen.dart';
 
-/// Pantalla de login con diseño profesional.
-/// Usa Consumer para escuchar cambios del AuthViewModel.
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -28,7 +21,6 @@ class _LoginScreenState extends State<LoginScreen>
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
-  // Animaciones
   late AnimationController _slideController;
   late Animation<Offset> _slideAnimation;
   late AnimationController _fadeController;
@@ -37,20 +29,16 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void initState() {
     super.initState();
-    // Animación de slide para el formulario
+
     _slideController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _slideController,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+          CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
+        );
 
-    // Animación de fade para el logo
     _fadeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -73,7 +61,6 @@ class _LoginScreenState extends State<LoginScreen>
     super.dispose();
   }
 
-  /// Maneja el proceso de login
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -130,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen>
                     ),
                   ),
                   const Spacer(flex: 1),
-                  // Link a registro
+
                   FadeTransition(
                     opacity: _fadeAnimation,
                     child: _buildRegisterLink(),
@@ -148,7 +135,6 @@ class _LoginScreenState extends State<LoginScreen>
   Widget _buildHeader() {
     return Column(
       children: [
-        // Ícono con efecto de brillo
         Container(
           width: 90,
           height: 90,
@@ -213,9 +199,9 @@ class _LoginScreenState extends State<LoginScreen>
           children: [
             Text(
               'Iniciar Sesión',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
@@ -230,14 +216,14 @@ class _LoginScreenState extends State<LoginScreen>
                 if (value == null || value.isEmpty) {
                   return 'Ingresa tu correo electrónico';
                 }
-                if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                    .hasMatch(value)) {
+                if (!RegExp(
+                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                ).hasMatch(value)) {
                   return 'Ingresa un correo válido';
                 }
                 return null;
               },
             ),
-            // Campo de contraseña
             CustomTextField(
               controller: _passwordController,
               label: 'Contraseña',
@@ -265,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen>
               },
             ),
             const SizedBox(height: 8),
-            // Botón de login con estado de Provider
+
             Consumer<AuthViewModel>(
               builder: (context, auth, _) {
                 return CustomButton(

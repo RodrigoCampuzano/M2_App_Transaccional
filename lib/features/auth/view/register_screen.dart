@@ -1,8 +1,3 @@
-// ============================================================
-// register_screen.dart - Pantalla de registro de usuario
-// UI con formulario completo, validaciones y animaciones
-// ============================================================
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
@@ -11,8 +6,6 @@ import '../../../core/widgets/custom_button.dart';
 import '../viewmodel/auth_viewmodel.dart';
 import '../../products/view/product_list_screen.dart';
 
-/// Pantalla de registro con formulario completo.
-/// Tras un registro exitoso, navega directamente a la lista de productos.
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -30,7 +23,6 @@ class _RegisterScreenState extends State<RegisterScreen>
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
 
-  // Animaciones
   late AnimationController _slideController;
   late Animation<Offset> _slideAnimation;
   late AnimationController _fadeController;
@@ -43,13 +35,10 @@ class _RegisterScreenState extends State<RegisterScreen>
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _slideController,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+          CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
+        );
 
     _fadeController = AnimationController(
       vsync: this,
@@ -131,10 +120,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                 ),
                 const SizedBox(height: 16),
                 // Header
-                FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: _buildHeader(),
-                ),
+                FadeTransition(opacity: _fadeAnimation, child: _buildHeader()),
                 const SizedBox(height: 32),
                 // Formulario
                 SlideTransition(
@@ -250,8 +236,9 @@ class _RegisterScreenState extends State<RegisterScreen>
                 if (value == null || value.isEmpty) {
                   return 'Ingresa tu correo electrónico';
                 }
-                if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                    .hasMatch(value)) {
+                if (!RegExp(
+                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                ).hasMatch(value)) {
                   return 'Ingresa un correo válido';
                 }
                 return null;

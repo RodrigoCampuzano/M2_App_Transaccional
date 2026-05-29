@@ -1,10 +1,3 @@
-// ============================================================
-// api_response.dart - Wrapper genérico para respuestas de la API
-// Encapsula éxito/error de las llamadas HTTP
-// ============================================================
-
-/// Clase genérica que envuelve las respuestas de la API.
-/// Permite manejar éxito y error de forma consistente.
 class ApiResponse<T> {
   final bool success;
   final T? data;
@@ -18,7 +11,6 @@ class ApiResponse<T> {
     required this.statusCode,
   });
 
-  /// Constructor para respuestas exitosas
   factory ApiResponse.success({
     required T data,
     String? message,
@@ -32,11 +24,7 @@ class ApiResponse<T> {
     );
   }
 
-  /// Constructor para respuestas con error
-  factory ApiResponse.error({
-    required String message,
-    int statusCode = 500,
-  }) {
+  factory ApiResponse.error({required String message, int statusCode = 500}) {
     return ApiResponse(
       success: false,
       message: message,

@@ -1,8 +1,3 @@
-// ============================================================
-// exceptions.dart - Excepciones personalizadas de la aplicación
-// ============================================================
-
-/// Excepción para errores de la API
 class ApiException implements Exception {
   final String message;
   final int? statusCode;
@@ -13,7 +8,6 @@ class ApiException implements Exception {
   String toString() => 'ApiException: $message (code: $statusCode)';
 }
 
-/// Excepción para errores de autenticación
 class AuthException implements Exception {
   final String message;
 
@@ -23,7 +17,6 @@ class AuthException implements Exception {
   String toString() => 'AuthException: $message';
 }
 
-/// Excepción para errores de red/conexión
 class NetworkException implements Exception {
   final String message;
 

@@ -1,12 +1,5 @@
-// ============================================================
-// custom_text_field.dart - Campo de texto reutilizable
-// Widget con animaciones y estilos consistentes
-// ============================================================
-
 import 'package:flutter/material.dart';
 
-/// Campo de texto personalizado con soporte para íconos,
-/// validación, y estilos consistentes con el tema.
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String label;
