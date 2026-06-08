@@ -60,10 +60,11 @@ class _ProductListScreenState extends State<ProductListScreen>
           FilledButton(
             onPressed: () async {
               Navigator.pop(ctx);
+              final messenger = ScaffoldMessenger.of(context);
               final vm = context.read<ProductViewModel>();
               final ok = await vm.deleteProduct(product.id!);
-              if (ok && mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
+              if (ok) {
+                messenger.showSnackBar(
                   SnackBar(content: Text('${product.name} eliminado')),
                 );
               }
@@ -122,12 +123,13 @@ class _ProductListScreenState extends State<ProductListScreen>
         child: FloatingActionButton.extended(
           heroTag: 'fab_new_product',
           onPressed: () async {
+            final vm = context.read<ProductViewModel>();
             final result = await Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const ProductFormScreen()),
             );
-            if (result == true && mounted) {
-              context.read<ProductViewModel>().loadProducts();
+            if (result == true) {
+              vm.loadProducts();
             }
           },
           icon: const Icon(Icons.add_rounded),

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import '../data/models/product_model.dart';
 import '../data/repositories/product_repository.dart';
+import '../../../../core/errors/exceptions.dart';
 
 class ProductViewModel extends ChangeNotifier {
   final ProductRepository _repository;
@@ -20,8 +21,7 @@ class ProductViewModel extends ChangeNotifier {
   String? get selectedCategory => _selectedCategory;
   String get searchQuery => _searchQuery;
 
-  ProductViewModel({required ProductRepository repository})
-    : _repository = repository;
+  ProductViewModel({required this._repository});
 
   Future<void> loadProducts() async {
     _setLoading(true);
@@ -149,10 +149,8 @@ class ProductViewModel extends ChangeNotifier {
   }
 
   String _parseError(dynamic error) {
-    final message = error.toString();
-    if (message.startsWith('Exception: ')) {
-      return message.substring(11);
-    }
-    return message;
+    if (error is ApiException) return error.message;
+    if (error is NetworkException) return error.message;
+    return error.toString();
   }
 }

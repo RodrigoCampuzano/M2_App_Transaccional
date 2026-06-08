@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'api_constants.dart';
+import '../errors/exceptions.dart';
 
 class ApiClient {
   final http.Client _client;
@@ -91,32 +92,28 @@ class ApiClient {
 
   Map<String, dynamic> _handleResponse(http.Response response) {
     final body = jsonDecode(response.body) as Map<String, dynamic>;
+    final status = response.statusCode;
 
-    switch (response.statusCode) {
-      case 200:
-      case 201:
-        return body;
-      case 400:
-        throw Exception(body['message'] ?? 'Solicitud inválida');
-      case 401:
-        throw Exception(body['message'] ?? 'No autorizado');
-      case 403:
-        throw Exception(body['message'] ?? 'Acceso denegado');
-      case 404:
-        throw Exception(body['message'] ?? 'Recurso no encontrado');
-      case 409:
-        throw Exception(body['message'] ?? 'Conflicto - El recurso ya existe');
-      case 500:
-      default:
-        throw Exception(body['message'] ?? 'Error del servidor');
+    if (status == 200 || status == 201) {
+      return body;
     }
+
+    final message = switch (status) {
+      400 => body['message'] ?? 'Solicitud inválida',
+      401 => body['message'] ?? 'No autorizado',
+      403 => body['message'] ?? 'Acceso denegado',
+      404 => body['message'] ?? 'Recurso no encontrado',
+      409 => body['message'] ?? 'Conflicto - El recurso ya existe',
+      _ => body['message'] ?? 'Error del servidor',
+    };
+    throw ApiException(message: message, statusCode: status);
   }
 
   Exception _handleError(dynamic error) {
-    if (error is Exception) {
+    if (error is ApiException) {
       return error;
     }
-    return Exception('Error de conexión. Verifica tu internet.');
+    return const NetworkException();
   }
 
   void dispose() {

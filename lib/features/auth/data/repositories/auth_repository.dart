@@ -18,7 +18,9 @@ class AuthRepository {
       body: {'name': name, 'email': email, 'password': password},
     );
 
-    return AuthResponseModel.fromJson(response['data']);
+    final authResponse = AuthResponseModel.fromJson(response['data']);
+    _apiClient.setToken(authResponse.token);
+    return authResponse;
   }
 
   Future<AuthResponseModel> login({
@@ -30,11 +32,17 @@ class AuthRepository {
       body: {'email': email, 'password': password},
     );
 
-    return AuthResponseModel.fromJson(response['data']);
+    final authResponse = AuthResponseModel.fromJson(response['data']);
+    _apiClient.setToken(authResponse.token);
+    return authResponse;
   }
 
   Future<UserModel> getProfile() async {
     final response = await _apiClient.get(ApiConstants.profile);
     return UserModel.fromJson(response['data']['user']);
+  }
+
+  void logout() {
+    _apiClient.setToken(null);
   }
 }

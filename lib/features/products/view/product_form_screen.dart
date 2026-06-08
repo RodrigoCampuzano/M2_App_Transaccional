@@ -228,7 +228,7 @@ class _ProductFormScreenState extends State<ProductFormScreen>
                 Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: DropdownButtonFormField<String>(
-                    value: _selectedCategory,
+                    initialValue: _selectedCategory,
                     decoration: InputDecoration(
                       labelText: 'Categoría',
                       prefixIcon: const Icon(Icons.category_outlined),

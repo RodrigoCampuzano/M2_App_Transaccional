@@ -1,11 +1,10 @@
 import 'package:flutter/foundation.dart';
 import '../data/models/user_model.dart';
 import '../data/repositories/auth_repository.dart';
-import '../../../../core/network/api_client.dart';
+import '../../../../core/errors/exceptions.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final AuthRepository _repository;
-  final ApiClient _apiClient;
 
   UserModel? _user;
   String? _token;
@@ -19,11 +18,7 @@ class AuthViewModel extends ChangeNotifier {
   String? get error => _error;
   bool get isAuthenticated => _isAuthenticated;
 
-  AuthViewModel({
-    required AuthRepository repository,
-    required ApiClient apiClient,
-  }) : _repository = repository,
-       _apiClient = apiClient;
+  AuthViewModel({required this._repository});
 
   Future<bool> login({required String email, required String password}) async {
     _setLoading(true);
@@ -38,8 +33,6 @@ class AuthViewModel extends ChangeNotifier {
       _user = authResponse.user;
       _token = authResponse.token;
       _isAuthenticated = true;
-
-      _apiClient.setToken(_token);
 
       _setLoading(false);
       return true;
@@ -69,8 +62,6 @@ class AuthViewModel extends ChangeNotifier {
       _token = authResponse.token;
       _isAuthenticated = true;
 
-      _apiClient.setToken(_token);
-
       _setLoading(false);
       return true;
     } catch (e) {
@@ -81,10 +72,10 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   void logout() {
+    _repository.logout();
     _user = null;
     _token = null;
     _isAuthenticated = false;
-    _apiClient.setToken(null);
     notifyListeners();
   }
 
@@ -103,10 +94,8 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   String _parseError(dynamic error) {
-    final message = error.toString();
-    if (message.startsWith('Exception: ')) {
-      return message.substring(11);
-    }
-    return message;
+    if (error is ApiException) return error.message;
+    if (error is NetworkException) return error.message;
+    return error.toString();
   }
 }
